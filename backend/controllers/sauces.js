@@ -62,17 +62,6 @@ exports.modifySauce = (req, res, next) => {
     .catch((error) => res.status(400).json({ error }));
 };
 
-// exports.modifyThing = (req, res, next) => {
-//   const thingObject = req.file ?
-//     {
-//       ...JSON.parse(req.body.thing),
-//       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-//     } : { ...req.body };
-//   Thing.updateOne({ _id: req.params.id }, { ...thingObject, _id: req.params.id })
-//     .then(() => res.status(200).json({ message: 'Objet modifié !'}))
-//     .catch(error => res.status(400).json({ error }));
-// };
-
 exports.deleteSauce = (req, res, next) => {
   Sauce.findOne({ _id: req.params.id }).then((sauce) => {
     const filename = sauce.imageUrl.split("/images/")[1];
@@ -86,7 +75,67 @@ exports.deleteSauce = (req, res, next) => {
 
 exports.getAllSauce = (req, res, next) => {
   Sauce.find()
+
     .then((sauces) => {
+      res.status(200).json(sauces);
+    })
+    .catch((error) => {
+      res.status(400).json({
+        error: error,
+      });
+    });
+};
+
+exports.likeDislikeSauce = (req, res, next) => {
+  let like = req.body.like;
+  let userId = req.body.userId;
+  let sauceId = req.params.id;
+  console.log(req.body);
+  console.log(
+    "Utilisateur qui ont like ou unlike = " + like,
+    "Id de l'utilisateur est : " + userId,
+    "Id de la sauce " + sauceId
+  );
+
+  Sauce.findOne({
+    _id: req.params.id,
+  })
+
+    .then((sauces) => {
+      if (like == 1) {
+        sauces.likes++;
+        sauces.usersLiked.push(userId);
+      }
+      if (like == -1) {
+        sauces.dislikes++;
+        sauces.usersDisliked.push(userId);
+      }
+      if (like == 0) {
+        if (sauces.usersLiked.includes(userId)) {
+          sauces.usersLiked.splice(userId) && sauces.likes--;
+        }
+
+        if (sauces.usersDisliked.includes(userId)) {
+          sauces.usersDisliked.splice(userId) && sauces.dislikes--;
+        }
+      }
+      Sauce.updateOne(
+        { _id: req.params.id },
+        {
+          likes: sauces.likes,
+          dislikes: sauces.dislikes,
+          usersLiked: sauces.usersLiked,
+          usersDisliked: sauces.usersDisliked,
+          _id: req.params.id,
+        }
+      )
+        .then(() => res.status(200).json({ message: "Objet modifié !" }))
+        .catch((error) => res.status(400).json({ error }));
+      console.log(sauces.usersLiked);
+      console.log(sauces.usersDisliked);
+      console.log(sauces.likes);
+      console.log(sauces.dislikes);
+
       res.status(200).json(sauces);
     })
     .catch((error) => {
