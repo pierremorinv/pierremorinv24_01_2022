@@ -92,9 +92,8 @@ exports.likeDislikeSauce = (req, res, next) => {
   let sauceId = req.params.id;
   console.log(req.body);
   console.log(
-    "Utilisateur qui ont like ou unlike = " + like,
-    "Id de l'utilisateur est : " + userId,
-    "Id de la sauce " + sauceId
+    "Id de l'utilisateur est: " + userId,
+    "Id de la sauce est:  " + sauceId
   );
 
   Sauce.findOne({
@@ -111,12 +110,12 @@ exports.likeDislikeSauce = (req, res, next) => {
         sauces.usersDisliked.push(userId);
       }
       if (like == 0) {
-        if (sauces.usersLiked.includes(userId)) {
-          sauces.usersLiked.splice(userId) && sauces.likes--;
+        if (sauces.usersLiked.includes(userId) == true) {
+          sauces.usersLiked.pop(userId) && sauces.likes--;
         }
 
-        if (sauces.usersDisliked.includes(userId)) {
-          sauces.usersDisliked.splice(userId) && sauces.dislikes--;
+        if (sauces.usersDisliked.includes(userId) == true) {
+          sauces.usersDisliked.pop(userId) && sauces.dislikes--;
         }
       }
       Sauce.updateOne(
@@ -128,9 +127,8 @@ exports.likeDislikeSauce = (req, res, next) => {
           usersDisliked: sauces.usersDisliked,
           _id: req.params.id,
         }
-      )
-        .then(() => res.status(200).json({ message: "Objet modifié !" }))
-        .catch((error) => res.status(400).json({ error }));
+      );
+
       console.log(sauces.usersLiked);
       console.log(sauces.usersDisliked);
       console.log(sauces.likes);
