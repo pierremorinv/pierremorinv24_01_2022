@@ -101,20 +101,20 @@ exports.likeDislikeSauce = (req, res, next) => {
     _id: req.params.id,
   })
     .then((sauces) => {
-      if (like == 1) {
+      if (like === 1) {
         sauces.likes++;
         sauces.usersLiked.push(userId);
       }
-      if (like == -1) {
+      if (like === -1) {
         sauces.dislikes++;
         sauces.usersDisliked.push(userId);
       }
-      if (like == 0) {
-        if (sauces.usersLiked.includes(userId) == true) {
+      if (like === 0) {
+        if (sauces.usersLiked.includes(userId) === true) {
           sauces.usersLiked.pop(userId) && sauces.likes--;
         }
 
-        if (sauces.usersDisliked.includes(userId) == true) {
+        if (sauces.usersDisliked.includes(userId) === true) {
           sauces.usersDisliked.pop(userId) && sauces.dislikes--;
         }
       }
