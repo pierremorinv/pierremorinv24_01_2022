@@ -8,7 +8,7 @@ const userSauces = require("./routes/user");
 
 mongoose
   .connect(
-    "mongodb+srv://PierreVqzz:Tktpoulette33.@cluster0.sr5gy.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+    "mongodb+srv://PierreVqzz:Tktpoulette33.@cluster0.o2eerra.mongodb.net/test",
     { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then(() => console.log("Connexion à MongoDB réussie !"))
