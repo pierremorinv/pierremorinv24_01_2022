@@ -110,11 +110,11 @@ exports.likeDislikeSauce = (req, res, next) => {
         sauces.usersDisliked.push(userId);
       }
       if (like === 0) {
-        if (sauces.usersLiked.includes(userId) === true) {
+        if (sauces.usersLiked.includes(userId)) {
           sauces.usersLiked.pop(userId) && sauces.likes--;
         }
 
-        if (sauces.usersDisliked.includes(userId) === true) {
+        if (sauces.usersDisliked.includes(userId)) {
           sauces.usersDisliked.pop(userId) && sauces.dislikes--;
         }
       }
