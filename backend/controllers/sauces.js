@@ -101,11 +101,13 @@ exports.likeDislikeSauce = (req, res, next) => {
     _id: req.params.id,
   })
     .then((sauces) => {
-      if (like === 1) {
+      if (like === 1 && sauces.usersLiked.includes(userId) == false) {
         sauces.likes++;
         sauces.usersLiked.push(userId);
-      }
-      if (like === -1) {
+      } else if (
+        like === -1 &&
+        sauces.usersDisliked.includes(userId) == false
+      ) {
         sauces.dislikes++;
         sauces.usersDisliked.push(userId);
       }
