@@ -1,5 +1,8 @@
+// importer le package HTTP de node.js
 const http = require("http");
+// importer l'application app.js
 const app = require("./app");
+// importer le package pour utiliser les variables d'environnement
 
 const normalizePort = (val) => {
   const port = parseInt(val, 10);
