@@ -20,7 +20,8 @@ passwordSchema
   .oneOf(["Passw0rd", "Password123", "Azerty123"]); // Ces mdp sont bannis
 
 module.exports = (req, res, next) => {
-  if (passwordSchema.validate(req.body.password)) {
+  const password = req.body.password;
+  if (passwordSchema.validate(password)) {
     next();
   } else {
     return res.status(400).json({
