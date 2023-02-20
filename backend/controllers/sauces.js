@@ -1,8 +1,10 @@
 const Sauce = require("../models/sauce");
+// package qui permet de modifier le système de fichier et supprimer des fichiers
 const fs = require("fs");
-
+// middleware pour la création d'une sauce
 exports.createSauce = (req, res, next) => {
   const sauceObject = JSON.parse(req.body.sauce);
+  // supprime l'id généré par le front-end
   delete sauceObject._id;
   const sauce = new Sauce({
     ...sauceObject,
@@ -37,7 +39,7 @@ exports.modifySauce = (req, res, next) => {
       _id: req.params.id,
     })
       .then((sauce) => {
-        const filename = sauce.imageUrl.split("/images/")[1]; // deleting the linked file
+        const filename = sauce.imageUrl.split("/images/")[1]; // suppression du fichier
         fs.unlink(`images/${filename}`, () => {});
       })
       .catch((error) =>
@@ -58,7 +60,7 @@ exports.modifySauce = (req, res, next) => {
     { _id: req.params.id },
     { ...sauceObject, _id: req.params.id }
   )
-    .then(() => res.status(200).json({ message: "Objet modifié !" }))
+    .then(() => res.status(200).json({ message: "Sauce modifié !" }))
     .catch((error) => res.status(400).json({ error }));
 };
 
@@ -92,22 +94,19 @@ exports.likeDislikeSauce = (req, res, next) => {
   let sauceId = req.params.id;
   console.log(req.body);
   console.log(
-    "Utilisateur qui ont like ou unlike = " + like,
+    "Utilisateur qui ont like ou unlike : " + like,
     "Id de l'utilisateur est : " + userId,
-    "Id de la sauce " + sauceId
+    "Id de la sauce est : " + sauceId
   );
 
   Sauce.findOne({
     _id: req.params.id,
   })
     .then((sauces) => {
-      if (like === 1 && sauces.usersLiked.includes(userId) == false) {
+      if (like === 1 && sauces.usersLiked.includes(!userId)) {
         sauces.likes++;
         sauces.usersLiked.push(userId);
-      } else if (
-        like === -1 &&
-        sauces.usersDisliked.includes(userId) == false
-      ) {
+      } else if (like === -1 && sauces.usersDisliked.includes(!userId)) {
         sauces.dislikes++;
         sauces.usersDisliked.push(userId);
       }

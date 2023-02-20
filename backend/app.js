@@ -1,13 +1,16 @@
+//
 require("dotenv").config();
 
 const express = require("express");
+// protège l'application de certaines vulnérabilités en configurant certains en-têtes HTTP
 const helmet = require("helmet");
 const mongoose = require("mongoose");
+// le package path me permet d'accédez au path de mon serveur
 const path = require("path");
-
 const saucesRoutes = require("./routes/sauces");
 const userSauces = require("./routes/user");
 
+// mongoose.connect me permet de me connecter à ma base de données mongoDb
 mongoose
   .connect(process.env.MONGO_DB_CREDENTIALS, {
     useNewUrlParser: true,
@@ -35,6 +38,7 @@ app.use((req, res, next) => {
   );
   next();
 });
+// express.json permet de lire le corps de la requête
 app.use(express.json());
 
 app.use("/images", express.static(path.join(__dirname, "images")));
