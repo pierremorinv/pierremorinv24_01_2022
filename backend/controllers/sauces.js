@@ -6,6 +6,7 @@ exports.createSauce = (req, res, next) => {
   const sauceObject = JSON.parse(req.body.sauce);
   // supprime l'id généré par le front-end
   delete sauceObject._id;
+  delete sauceObject._userId;
   const sauce = new Sauce({
     ...sauceObject,
     imageUrl: `${req.protocol}://${req.get("host")}/images/${
